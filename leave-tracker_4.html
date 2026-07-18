@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>ทะเบียนการลากำลังพล</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Taviraj:wght@500;600;700&family=Sarabun:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  --paper:#F2EDDD;
+  --paper-2:#EAE2C9;
+  --card:#F8F4E6;
+  --ink:#232A20;
+  --ink-soft:#5B5A47;
+  --olive:#4B5A3A;
+  --olive-dark:#333F26;
+  --brass:#A9813F;
+  --line:#C7BC98;
+  --stamp-red:#9C3B3B;
+  --stamp-green:#3E6B4F;
+  --stamp-amber:#B27C2E;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Sarabun',sans-serif;
+  background-image:
+    linear-gradient(var(--paper) 0%, var(--paper) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(75,90,58,0.05) 28px);
+  min-height:100vh;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 80px;}
+
+.login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.login-card{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  width:100%;max-width:360px;padding:32px 30px;text-align:center;
+  box-shadow:0 2px 0 var(--line);
+}
+.login-card .seal{width:56px;height:56px;margin:0 auto 10px;}
+.login-card h1{font-family:'Taviraj',serif;font-size:21px;color:var(--olive-dark);margin:0 0 2px;}
+.login-card p{font-size:13px;color:var(--ink-soft);margin:0 0 22px;}
+.login-card .field{margin-bottom:12px;text-align:left;}
+.login-card .field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:4px;}
+.login-card input{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:5px;
+  background:#fff;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--ink);
+}
+.login-card .btn-primary{width:100%;margin-top:10px;}
+.login-error{color:var(--stamp-red);font-size:12.5px;margin-top:10px;display:none;}
+.login-hint{margin-top:18px;font-size:11.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:12px;}
+
+.letterhead{
+  display:flex;align-items:center;gap:20px;
+  border-bottom:3px double var(--olive);
+  padding-bottom:18px;margin-bottom:22px;
+}
+.seal{width:64px;height:64px;flex-shrink:0;}
+.letterhead h1{
+  font-family:'Taviraj',serif;font-weight:700;font-size:28px;
+  margin:0;color:var(--olive-dark);letter-spacing:.3px;
+}
+.letterhead p{margin:2px 0 0;color:var(--ink-soft);font-size:14px;}
+.userchip{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.userchip .who{text-align:right;}
+.userchip .who b{display:block;font-size:13.5px;color:var(--olive-dark);}
+.userchip .who span{font-size:11.5px;color:var(--ink-soft);}
+
+.stamps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;}
+.stamp-card{
+  background:var(--card);border:1px solid var(--line);border-radius:6px;
+  padding:14px 16px;position:relative;overflow:hidden;
+}
+.stamp-card .num{font-family:'Taviraj',serif;font-weight:700;font-size:30px;color:var(--olive-dark);}
+.stamp-card .lbl{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+.stamp-badge{
+  position:absolute;top:10px;right:10px;width:46px;height:46px;border-radius:50%;
+  border:2px solid currentColor;display:flex;align-items:center;justify-content:center;
+  font-family:'Taviraj',serif;font-weight:700;font-size:11px;transform:rotate(-12deg);
+  opacity:.75;
+}
+
+.grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start;}
+@media (max-width:860px){.grid{grid-template-columns:1fr;}}
+
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 20px;
+}
+.panel h2{
+  font-family:'Taviraj',serif;font-size:17px;margin:0 0 14px;color:var(--olive-dark);
+  border-bottom:1px solid var(--line);padding-bottom:8px;
+}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:4px;}
+.field input,.field select,.field textarea{
+  width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:4px;
+  background:#fff;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--ink);
+}
+.field textarea{resize:vertical;min-height:52px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.days-hint{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--olive);margin-top:2px;}
+
+.btn{
+  border:none;border-radius:5px;padding:10px 16px;font-family:'Sarabun',sans-serif;
+  font-weight:600;font-size:14px;cursor:pointer;transition:opacity .15s;
+}
+.btn:hover{opacity:.88;}
+.btn-primary{background:var(--olive);color:#fff;width:100%;margin-top:4px;}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink-soft);}
+.btn-sm{padding:5px 9px;font-size:12px;border-radius:4px;}
+.btn-logout{background:transparent;border:1px solid var(--line);color:var(--stamp-red);padding:7px 12px;font-size:12.5px;}
+
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.filters select,.filters input{
+  padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:#fff;
+  font-family:'Sarabun',sans-serif;font-size:13px;color:var(--ink);
+}
+.filters input[type=text]{flex:1;min-width:160px;}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+thead th{
+  text-align:left;font-family:'Taviraj',serif;font-weight:600;font-size:13px;
+  color:var(--olive-dark);border-bottom:2px solid var(--olive);padding:8px 10px;
+  white-space:nowrap;
+}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:hover{background:rgba(75,90,58,0.06);}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+.type-chip{
+  display:inline-block;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600;color:#fff;
+}
+.stamp{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1.5px solid currentColor;width:66px;height:34px;border-radius:16px;
+  font-family:'Taviraj',serif;font-weight:700;font-size:11.5px;transform:rotate(-4deg);
+  letter-spacing:.3px;
+}
+.actions{display:flex;gap:6px;}
+.empty{padding:40px 10px;text-align:center;color:var(--ink-soft);}
+.empty b{font-family:'Taviraj',serif;color:var(--olive-dark);font-size:16px;display:block;margin-bottom:4px;}
+
+.topbar-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+
+.admin-panel{margin-top:20px;}
+.user-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.user-row .u-name{flex:1;}
+.user-row .u-role{font-size:11px;color:var(--ink-soft);background:var(--paper-2);padding:2px 8px;border-radius:10px;}
+
+.nav-tabs{display:flex;gap:6px;margin-bottom:20px;}
+.nav-btn{
+  border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+  padding:8px 16px;border-radius:20px;font-family:'Sarabun',sans-serif;font-size:13px;
+  font-weight:600;cursor:pointer;
+}
+.nav-btn.active{background:var(--olive);border-color:var(--olive);color:#fff;}
+
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(35,42,32,0.45);
+  display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;
+}
+.modal-card{
+  background:var(--card);border:1px solid var(--line);border-radius:8px;
+  width:100%;max-width:400px;padding:22px 24px;
+}
+.modal-card h2{
+  font-family:'Taviraj',serif;font-size:17px;margin:0 0 14px;color:var(--olive-dark);
+}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <svg class="seal" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#4B5A3A" stroke-width="2"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#4B5A3A" stroke-width="1"/>
+      <path d="M50 22 L56 42 L77 42 L60 54 L66 74 L50 62 L34 74 L40 54 L23 42 L44 42 Z" fill="#4B5A3A"/>
+    </svg>
+    <h1>ทะเบียนการลากำลังพล</h1>
+    <p>เข้าสู่ระบบเพื่อบันทึกและติดตามการลา</p>
+    <div class="field">
+      <label>ชื่อผู้ใช้</label>
+      <input type="text" id="loginUser" placeholder="username" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>รหัสผ่าน</label>
+      <input type="password" id="loginPass" placeholder="password" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" id="btnLogin">เข้าสู่ระบบ</button>
+    <div class="login-error" id="loginError">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+    <div class="login-hint" id="loginHint"></div>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none;">
+
+  <div class="letterhead">
+    <svg class="seal" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#4B5A3A" stroke-width="2"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#4B5A3A" stroke-width="1"/>
+      <path d="M50 22 L56 42 L77 42 L60 54 L66 74 L50 62 L34 74 L40 54 L23 42 L44 42 Z" fill="#4B5A3A"/>
+    </svg>
+    <div>
+      <h1>ทะเบียนการลากำลังพล</h1>
+      <p>ระบบบันทึกและติดตามการลาทุกประเภทของกำลังพลในหน่วย</p>
+    </div>
+    <div class="userchip">
+      <div class="who"><b id="whoName"></b><span id="whoRole"></span></div>
+      <button class="btn btn-logout" id="btnLogout">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-btn active" id="navMain">หน้าหลัก</button>
+    <button class="nav-btn" id="navLedger">รายการบันทึกการลา</button>
+    <button class="nav-btn" id="navRoster">คลังรายชื่อกำลังพล</button>
+    <button class="nav-btn" id="navUsers" style="display:none;">จัดการผู้ใช้งาน</button>
+  </div>
+
+  <div id="mainView">
+    <div class="panel" style="max-width:520px;margin:0 auto;">
+      <h2 id="formTitle">บันทึกการลาใหม่</h2>
+      <div class="field">
+        <label>ยศ - ชื่อ สกุล</label>
+        <input type="text" id="fName" list="personnelDatalist" placeholder="พิมพ์หรือเลือกจากคลังรายชื่อ" autocomplete="off">
+        <datalist id="personnelDatalist"></datalist>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>หน่วย / สังกัด</label>
+          <input type="text" id="fUnit" placeholder="เช่น ร้อย.1 พัน.2">
+        </div>
+        <div class="field">
+          <label>ตำแหน่ง</label>
+          <input type="text" id="fPosition" placeholder="เช่น ผบ.หมู่">
+        </div>
+      </div>
+      <div class="field">
+        <label>ประเภทการลา</label>
+        <select id="fType"></select>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>วันที่เริ่มลา</label>
+          <input type="date" id="fStart">
+        </div>
+        <div class="field">
+          <label>วันที่สิ้นสุด</label>
+          <input type="date" id="fEnd">
+        </div>
+      </div>
+      <div class="days-hint" id="daysHint">จำนวนวันลา: -</div>
+      <div class="field" style="margin-top:12px;">
+        <label>เหตุผล / รายละเอียด</label>
+        <textarea id="fReason" placeholder="ระบุเหตุผลการลาโดยย่อ"></textarea>
+      </div>
+      <div class="field">
+        <label>สถานะ</label>
+        <select id="fStatus">
+          <option value="pending">รออนุมัติ</option>
+          <option value="approved">อนุมัติแล้ว</option>
+          <option value="rejected">ไม่อนุมัติ</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="btnSave">บันทึกรายการลา</button>
+      <button class="btn btn-ghost" id="btnCancelEdit" style="width:100%;margin-top:8px;display:none;">ยกเลิกการแก้ไข</button>
+    </div>
+  </div>
+
+  <div id="ledgerView" style="display:none;">
+    <div class="stamps">
+      <div class="stamp-card"><div class="num" id="statTotal">0</div><div class="lbl">รายการลาทั้งหมด</div>
+        <div class="stamp-badge" style="color:var(--olive)">ทั้ง<br>หมด</div></div>
+      <div class="stamp-card"><div class="num" id="statOnLeave">0</div><div class="lbl">อยู่ระหว่างลาวันนี้</div>
+        <div class="stamp-badge" style="color:var(--stamp-green)">วันนี้</div></div>
+      <div class="stamp-card"><div class="num" id="statPending">0</div><div class="lbl">รออนุมัติ</div>
+        <div class="stamp-badge" style="color:var(--stamp-amber)">รอ</div></div>
+      <div class="stamp-card"><div class="num" id="statPeople">0</div><div class="lbl">กำลังพลที่มีบันทึกลา (ปีนี้)</div>
+        <div class="stamp-badge" style="color:var(--brass)">คน</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="topbar-actions">
+        <h2 style="margin:0;border:none;padding:0;">รายการบันทึกการลา</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm" id="btnExport">ส่งออก CSV</button>
+          <button class="btn btn-ghost btn-sm" id="btnExportExcel" style="border-color:var(--brass);color:var(--brass);">ส่งออก Excel (แดชบอร์ด)</button>
+        </div>
+      </div>
+      <div class="filters">
+        <input type="text" id="qSearch" placeholder="ค้นหาชื่อหรือหน่วย...">
+        <select id="qType"><option value="">ทุกประเภทการลา</option></select>
+        <select id="qStatus">
+          <option value="">ทุกสถานะ</option>
+          <option value="pending">รออนุมัติ</option>
+          <option value="approved">อนุมัติแล้ว</option>
+          <option value="rejected">ไม่อนุมัติ</option>
+        </select>
+      </div>
+      <div id="tableWrap"></div>
+    </div>
+  </div>
+
+  <div id="usersView" style="display:none;">
+    <div class="panel">
+      <h2>จัดการผู้ใช้งาน (ผู้ดูแลระบบ)</h2>
+      <div id="userList"></div>
+      <div class="row2" style="margin-top:12px;">
+        <div class="field"><label>ชื่อผู้ใช้ใหม่</label><input type="text" id="newUsername"></div>
+        <div class="field"><label>รหัสผ่าน</label><input type="text" id="newPassword"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>ชื่อที่แสดง</label><input type="text" id="newDisplayName"></div>
+        <div class="field"><label>สิทธิ์</label>
+          <select id="newRole"><option value="staff">เจ้าหน้าที่</option><option value="admin">ผู้ดูแลระบบ</option></select>
+        </div>
+      </div>
+      <button class="btn btn-ghost" id="btnAddUser" style="width:100%;">เพิ่มผู้ใช้งาน</button>
+    </div>
+  </div>
+
+  <div id="rosterView" style="display:none;">
+    <div class="panel">
+      <div class="topbar-actions">
+        <h2 style="margin:0;border:none;padding:0;">คลังรายชื่อกำลังพลทั้งหมด</h2>
+        <button class="btn btn-primary" id="btnOpenAddPersonnel2" style="width:auto;margin-top:0;padding:8px 16px;font-size:13px;">+ เพิ่มกำลังพล</button>
+      </div>
+      <div class="filters">
+        <input type="text" id="rSearch" placeholder="ค้นหาชื่อ...">
+        <select id="rUnit"><option value="">ทุกสังกัด</option></select>
+      </div>
+      <div id="rosterTableWrap"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="personnelModalOverlay" style="display:none;">
+  <div class="modal-card">
+    <h2 id="personnelModalTitle">เพิ่มกำลังพลเข้าคลังรายชื่อ</h2>
+    <div class="field">
+      <label>ยศ - ชื่อ สกุล</label>
+      <input type="text" id="pName" placeholder="เช่น ร.ท. สมชาย ใจดี">
+    </div>
+    <div class="row2">
+      <div class="field"><label>หน่วย / สังกัด</label><input type="text" id="pUnit" placeholder="เช่น ร้อย.1 พัน.2"></div>
+      <div class="field"><label>ตำแหน่ง</label><input type="text" id="pPosition" placeholder="เช่น ผบ.หมู่"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn btn-ghost" id="btnCancelPersonnelModal" style="flex:1;">ยกเลิก</button>
+      <button class="btn btn-primary" id="btnSavePersonnelModal" style="flex:1;margin-top:0;">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script>
+const LEAVE_TYPES = [
+  {id:'sick', label:'ลาป่วย', color:'#9C3B3B'},
+  {id:'personal', label:'ลากิจส่วนตัว', color:'#4B5A3A'},
+  {id:'annual', label:'ลาพักผ่อนประจำปี', color:'#2F6B5E'},
+  {id:'maternity', label:'ลาคลอดบุตร', color:'#B0637E'},
+  {id:'paternity', label:'ลาไปช่วยเหลือภริยาคลอดบุตร', color:'#8A6BA8'},
+  {id:'ordain', label:'ลาอุปสมบท', color:'#C97B23'},
+  {id:'conscript', label:'ลาเข้ารับการตรวจเลือก/เตรียมพล', color:'#2C3E66'},
+  {id:'training', label:'ลาศึกษา/ฝึกอบรม/ดูงาน', color:'#2E6B7E'},
+  {id:'spouse', label:'ลาติดตามคู่สมรส', color:'#7A6A4F'},
+  {id:'abroad', label:'ลาไปต่างประเทศ', color:'#3E5C76'},
+  {id:'other', label:'อื่นๆ', color:'#6B6B6B'}
+];
+const STATUS_LABEL = {pending:'รออนุมัติ', approved:'อนุมัติแล้ว', rejected:'ไม่อนุมัติ'};
+const STATUS_COLOR = {pending:'var(--stamp-amber)', approved:'var(--stamp-green)', rejected:'var(--stamp-red)'};
+const ROLE_LABEL = {admin:'ผู้ดูแลระบบ', staff:'เจ้าหน้าที่'};
+
+let records = [];
+let users = [];
+let personnel = [];
+let currentUser = null;
+let editingId = null;
+
+function typeInfo(id){ return LEAVE_TYPES.find(t=>t.id===id) || LEAVE_TYPES[LEAVE_TYPES.length-1]; }
+function fmtDate(d){
+  if(!d) return '-';
+  const dt = new Date(d+'T00:00:00');
+  return dt.toLocaleDateString('th-TH',{day:'2-digit',month:'short',year:'2-digit'});
+}
+function dayCount(start,end){
+  if(!start || !end) return 0;
+  const s = new Date(start+'T00:00:00'), e = new Date(end+'T00:00:00');
+  const diff = Math.round((e-s)/86400000)+1;
+  return diff>0?diff:0;
+}
+function uid(){ return 'r'+Date.now()+Math.random().toString(36).slice(2,7); }
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function loadUsers(){
+  try{
+    const res = await window.storage.get('leave-app-users', true);
+    users = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ users = []; }
+  if(!users || users.length===0){
+    users = [{id:'u1', username:'admin', password:'admin1234', displayName:'ผู้ดูแลระบบ', role:'admin'}];
+    await saveUsers();
+  }
+}
+async function saveUsers(){
+  try{ await window.storage.set('leave-app-users', JSON.stringify(users), true); }
+  catch(e){ console.error('บันทึกผู้ใช้งานไม่สำเร็จ', e); }
+}
+
+async function handleLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  const match = users.find(x=>x.username===u && x.password===p);
+  if(!match){
+    err.style.display='block';
+    return;
+  }
+  err.style.display='none';
+  currentUser = match;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('whoName').textContent = currentUser.displayName;
+  document.getElementById('whoRole').textContent = ROLE_LABEL[currentUser.role] || currentUser.role;
+  document.getElementById('navUsers').style.display = currentUser.role==='admin' ? 'inline-block' : 'none';
+  switchView('main');
+  await loadPersonnel();
+  await loadRecords();
+}
+
+function handleLogout(){
+  currentUser = null;
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+}
+
+function renderUserList(){
+  const wrap = document.getElementById('userList');
+  wrap.innerHTML = users.map(u=>`
+    <div class="user-row">
+      <span class="u-name">${escapeHtml(u.displayName)} <span class="mono" style="color:var(--ink-soft);">(${escapeHtml(u.username)})</span></span>
+      <span class="u-role">${ROLE_LABEL[u.role]}</span>
+      ${u.id!==currentUser.id ? `<button class="btn btn-ghost btn-sm" onclick="deleteUser('${u.id}')">ลบ</button>` : ''}
+    </div>`).join('');
+}
+
+async function addUser(){
+  const username = document.getElementById('newUsername').value.trim();
+  const password = document.getElementById('newPassword').value;
+  const displayName = document.getElementById('newDisplayName').value.trim();
+  const role = document.getElementById('newRole').value;
+  if(!username || !password || !displayName){
+    alert('กรุณากรอกข้อมูลผู้ใช้งานให้ครบถ้วน');
+    return;
+  }
+  if(users.some(u=>u.username===username)){
+    alert('มีชื่อผู้ใช้นี้อยู่แล้ว');
+    return;
+  }
+  users.push({id:uid(), username, password, displayName, role});
+  await saveUsers();
+  document.getElementById('newUsername').value='';
+  document.getElementById('newPassword').value='';
+  document.getElementById('newDisplayName').value='';
+  renderUserList();
+}
+
+async function deleteUser(id){
+  if(!confirm('ยืนยันการลบผู้ใช้งานนี้หรือไม่?')) return;
+  users = users.filter(u=>u.id!==id);
+  await saveUsers();
+  renderUserList();
+}
+
+async function loadPersonnel(){
+  try{
+    const res = await window.storage.get('leave-app-personnel', true);
+    personnel = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ personnel = []; }
+  renderPersonnelDatalist();
+}
+async function savePersonnel(){
+  try{ await window.storage.set('leave-app-personnel', JSON.stringify(personnel), true); }
+  catch(e){ console.error('บันทึกคลังรายชื่อไม่สำเร็จ', e); }
+}
+
+function renderPersonnelDatalist(){
+  const dl = document.getElementById('personnelDatalist');
+  dl.innerHTML = personnel.map(p=>`<option value="${escapeHtml(p.name)}"></option>`).join('');
+}
+
+let editingPersonnelId = null;
+
+function openPersonnelModal(person){
+  editingPersonnelId = person ? person.id : null;
+  document.getElementById('personnelModalTitle').textContent = person ? 'แก้ไขข้อมูลกำลังพล' : 'เพิ่มกำลังพลเข้าคลังรายชื่อ';
+  document.getElementById('pName').value = person ? person.name : '';
+  document.getElementById('pUnit').value = person ? person.unit : '';
+  document.getElementById('pPosition').value = person ? person.position : '';
+  document.getElementById('personnelModalOverlay').style.display = 'flex';
+  document.getElementById('pName').focus();
+}
+
+function closePersonnelModal(){
+  editingPersonnelId = null;
+  document.getElementById('personnelModalOverlay').style.display = 'none';
+}
+
+async function savePersonnelModal(){
+  const name = document.getElementById('pName').value.trim();
+  const unit = document.getElementById('pUnit').value.trim();
+  const position = document.getElementById('pPosition').value.trim();
+  if(!name){
+    alert('กรุณากรอกยศ-ชื่อ สกุล');
+    return;
+  }
+  if(personnel.some(p=>p.name===name && p.id!==editingPersonnelId)){
+    alert('มีชื่อนี้อยู่ในคลังแล้ว');
+    return;
+  }
+  if(editingPersonnelId){
+    const idx = personnel.findIndex(p=>p.id===editingPersonnelId);
+    if(idx>-1) personnel[idx] = {...personnel[idx], name, unit, position};
+  } else {
+    personnel.push({id:uid(), name, unit, position});
+  }
+  await savePersonnel();
+  renderPersonnelDatalist();
+  renderRosterUnitFilter();
+  renderRosterTable();
+  closePersonnelModal();
+}
+
+async function deletePersonnel(id){
+  if(!confirm('ยืนยันการลบรายชื่อนี้ออกจากคลังหรือไม่?')) return;
+  personnel = personnel.filter(p=>p.id!==id);
+  await savePersonnel();
+  renderPersonnelDatalist();
+  renderRosterUnitFilter();
+  renderRosterTable();
+}
+
+function renderRosterUnitFilter(){
+  const sel = document.getElementById('rUnit');
+  const current = sel.value;
+  const counts = {};
+  personnel.forEach(p=>{
+    const u = p.unit || 'ไม่ระบุสังกัด';
+    counts[u] = (counts[u]||0)+1;
+  });
+  const units = Object.keys(counts).sort((a,b)=>a.localeCompare(b,'th'));
+  sel.innerHTML = '<option value="">ทุกสังกัด (' + personnel.length + ')</option>' +
+    units.map(u=>`<option value="${escapeHtml(u)}">${escapeHtml(u)} (${counts[u]})</option>`).join('');
+  if(units.includes(current)) sel.value = current;
+}
+
+function renderRosterTable(){
+  const q = document.getElementById('rSearch').value.trim().toLowerCase();
+  const unitFilter = document.getElementById('rUnit').value;
+  const list = personnel.filter(p=>{
+    if(q && !p.name.toLowerCase().includes(q)) return false;
+    if(unitFilter && (p.unit || 'ไม่ระบุสังกัด') !== unitFilter) return false;
+    return true;
+  }).sort((a,b)=>a.name.localeCompare(b.name,'th'));
+
+  const wrap = document.getElementById('rosterTableWrap');
+  if(list.length===0){
+    wrap.innerHTML = `<div class="empty"><b>ไม่พบรายชื่อ</b>ลองเปลี่ยนคำค้นหาหรือสังกัด หรือเพิ่มกำลังพลใหม่ด้วยปุ่มด้านบน</div>`;
+    return;
+  }
+  const rows = list.map(p=>`
+    <tr>
+      <td style="font-weight:600;">${escapeHtml(p.name)}</td>
+      <td>${escapeHtml(p.unit||'-')}</td>
+      <td>${escapeHtml(p.position||'-')}</td>
+      <td>
+        <div class="actions">
+          <button class="btn btn-ghost btn-sm" onclick='openPersonnelModal(${JSON.stringify(p)})'>แก้ไข</button>
+          <button class="btn btn-ghost btn-sm" onclick="deletePersonnel('${p.id}')">ลบ</button>
+        </div>
+      </td>
+    </tr>`).join('');
+  wrap.innerHTML = `<table>
+    <thead><tr><th>ยศ - ชื่อ สกุล</th><th>หน่วย / สังกัด</th><th>ตำแหน่ง</th><th>จัดการ</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function switchView(view){
+  document.getElementById('mainView').style.display = view==='main' ? 'block' : 'none';
+  document.getElementById('ledgerView').style.display = view==='ledger' ? 'block' : 'none';
+  document.getElementById('rosterView').style.display = view==='roster' ? 'block' : 'none';
+  document.getElementById('usersView').style.display = view==='users' ? 'block' : 'none';
+  document.getElementById('navMain').classList.toggle('active', view==='main');
+  document.getElementById('navLedger').classList.toggle('active', view==='ledger');
+  document.getElementById('navRoster').classList.toggle('active', view==='roster');
+  document.getElementById('navUsers').classList.toggle('active', view==='users');
+  if(view==='ledger'){
+    render();
+  }
+  if(view==='roster'){
+    renderRosterUnitFilter();
+    renderRosterTable();
+  }
+  if(view==='users' && currentUser && currentUser.role==='admin'){
+    renderUserList();
+  }
+}
+
+function autofillFromPersonnel(){
+  const name = document.getElementById('fName').value.trim();
+  const match = personnel.find(p=>p.name===name);
+  if(match){
+    document.getElementById('fUnit').value = match.unit || '';
+    document.getElementById('fPosition').value = match.position || '';
+  }
+}
+
+function populateSelects(){
+  const fType = document.getElementById('fType');
+  fType.innerHTML = LEAVE_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
+  const qType = document.getElementById('qType');
+  qType.innerHTML = '<option value="">ทุกประเภทการลา</option>' + LEAVE_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
+}
+
+async function loadRecords(){
+  try{
+    const res = await window.storage.get('leave-records', true);
+    records = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ records = []; }
+  render();
+}
+async function saveRecords(){
+  try{ await window.storage.set('leave-records', JSON.stringify(records), true); }
+  catch(e){ console.error('บันทึกไม่สำเร็จ', e); }
+}
+
+function resetForm(){
+  editingId = null;
+  document.getElementById('formTitle').textContent = 'บันทึกการลาใหม่';
+  document.getElementById('fName').value='';
+  document.getElementById('fUnit').value='';
+  document.getElementById('fPosition').value='';
+  document.getElementById('fType').value = LEAVE_TYPES[0].id;
+  document.getElementById('fStart').value='';
+  document.getElementById('fEnd').value='';
+  document.getElementById('fReason').value='';
+  document.getElementById('fStatus').value='pending';
+  document.getElementById('daysHint').textContent='จำนวนวันลา: -';
+  document.getElementById('btnCancelEdit').style.display='none';
+  document.getElementById('btnSave').textContent='บันทึกรายการลา';
+}
+
+function fillFormForEdit(rec){
+  editingId = rec.id;
+  document.getElementById('formTitle').textContent = 'แก้ไขรายการลา';
+  document.getElementById('fName').value = rec.name;
+  document.getElementById('fUnit').value = rec.unit;
+  document.getElementById('fPosition').value = rec.position;
+  document.getElementById('fType').value = rec.type;
+  document.getElementById('fStart').value = rec.start;
+  document.getElementById('fEnd').value = rec.end;
+  document.getElementById('fReason').value = rec.reason;
+  document.getElementById('fStatus').value = rec.status;
+  document.getElementById('daysHint').textContent = 'จำนวนวันลา: '+dayCount(rec.start,rec.end)+' วัน';
+  document.getElementById('btnCancelEdit').style.display='block';
+  document.getElementById('btnSave').textContent='บันทึกการแก้ไข';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateDaysHint(){
+  const s = document.getElementById('fStart').value;
+  const e = document.getElementById('fEnd').value;
+  const n = dayCount(s,e);
+  document.getElementById('daysHint').textContent = n>0 ? `จำนวนวันลา: ${n} วัน` : 'จำนวนวันลา: -';
+}
+
+async function saveFromForm(){
+  const name = document.getElementById('fName').value.trim();
+  const unit = document.getElementById('fUnit').value.trim();
+  const position = document.getElementById('fPosition').value.trim();
+  const type = document.getElementById('fType').value;
+  const start = document.getElementById('fStart').value;
+  const end = document.getElementById('fEnd').value;
+  const reason = document.getElementById('fReason').value.trim();
+  const status = document.getElementById('fStatus').value;
+
+  if(!name || !start || !end){
+    alert('กรุณากรอกชื่อ วันที่เริ่มลา และวันที่สิ้นสุดให้ครบถ้วน');
+    return;
+  }
+  if(new Date(end) < new Date(start)){
+    alert('วันที่สิ้นสุดต้องไม่ก่อนวันที่เริ่มลา');
+    return;
+  }
+
+  if(editingId){
+    const idx = records.findIndex(r=>r.id===editingId);
+    if(idx>-1){
+      records[idx] = {...records[idx], name, unit, position, type, start, end, reason, status};
+    }
+  } else {
+    records.unshift({id:uid(), name, unit, position, type, start, end, reason, status, createdBy:currentUser.username, createdAt:Date.now()});
+  }
+  await saveRecords();
+  resetForm();
+  render();
+}
+
+async function deleteRecord(id){
+  if(!confirm('ยืนยันการลบรายการนี้หรือไม่?')) return;
+  records = records.filter(r=>r.id!==id);
+  await saveRecords();
+  render();
+}
+
+function isOnLeaveToday(rec){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const s = new Date(rec.start+'T00:00:00');
+  const e = new Date(rec.end+'T00:00:00');
+  return today>=s && today<=e && rec.status!=='rejected';
+}
+
+function computeStats(){
+  const total = records.length;
+  const onLeave = records.filter(isOnLeaveToday).length;
+  const pending = records.filter(r=>r.status==='pending').length;
+  const now = new Date();
+  const peopleThisYear = new Set(
+    records
+      .filter(r=>{
+        const s = new Date(r.start+'T00:00:00');
+        return r.status!=='rejected' && s.getFullYear()===now.getFullYear();
+      })
+      .map(r=>r.name)
+  ).size;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statOnLeave').textContent = onLeave;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statPeople').textContent = peopleThisYear;
+}
+
+function computePersonAccumulations(){
+  const now = new Date();
+  const byPerson = {};
+  records.forEach(r=>{
+    const s = new Date(r.start+'T00:00:00');
+    if(r.status==='rejected' || s.getFullYear()!==now.getFullYear()) return;
+    if(!byPerson[r.name]) byPerson[r.name] = {days:0, byType:{}};
+    const d = dayCount(r.start,r.end);
+    byPerson[r.name].days += d;
+    byPerson[r.name].byType[r.type] = (byPerson[r.name].byType[r.type]||0) + d;
+  });
+  return byPerson;
+}
+
+function getFiltered(){
+  const q = document.getElementById('qSearch').value.trim().toLowerCase();
+  const type = document.getElementById('qType').value;
+  const status = document.getElementById('qStatus').value;
+  return records.filter(r=>{
+    if(q && !(r.name.toLowerCase().includes(q) || r.unit.toLowerCase().includes(q))) return false;
+    if(type && r.type!==type) return false;
+    if(status && r.status!==status) return false;
+    return true;
+  });
+}
+
+function renderTable(){
+  const list = getFiltered();
+  const wrap = document.getElementById('tableWrap');
+  if(list.length===0){
+    wrap.innerHTML = `<div class="empty"><b>ยังไม่มีรายการ</b>เพิ่มบันทึกการลาแรกของกำลังพลได้จากแบบฟอร์มด้านซ้าย</div>`;
+    return;
+  }
+  const accMap = computePersonAccumulations();
+  const rows = list.map(r=>{
+    const ti = typeInfo(r.type);
+    const acc = accMap[r.name];
+    let accLine = '';
+    if(acc){
+      const typeBits = Object.entries(acc.byType)
+        .sort((a,b)=>b[1]-a[1])
+        .map(([tid,d])=>`${typeInfo(tid).label} ${d} วัน`)
+        .join(' · ');
+      accLine = `<div style="font-size:11px;color:var(--olive);margin-top:3px;">สะสมปีนี้ ${acc.days} วัน — ${typeBits}</div>`;
+    }
+    return `<tr>
+      <td>
+        <div style="font-weight:600;">${escapeHtml(r.name)}</div>
+        <div style="font-size:12px;color:var(--ink-soft);">${escapeHtml(r.unit||'-')}${r.position? ' · '+escapeHtml(r.position):''}</div>
+        ${accLine}
+      </td>
+      <td><span class="type-chip" style="background:${ti.color}">${ti.label}</span></td>
+      <td class="mono">${fmtDate(r.start)} — ${fmtDate(r.end)}</td>
+      <td class="mono" style="text-align:center;">${dayCount(r.start,r.end)}</td>
+      <td><span class="stamp" style="color:${STATUS_COLOR[r.status]}">${STATUS_LABEL[r.status]}</span></td>
+      <td>
+        <div class="actions">
+          <button class="btn btn-ghost btn-sm" onclick="editRecord('${r.id}')">แก้ไข</button>
+          <button class="btn btn-ghost btn-sm" onclick="deleteRecord('${r.id}')">ลบ</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `<table>
+    <thead><tr>
+      <th>กำลังพล</th><th>ประเภทการลา</th><th>ช่วงวันที่</th><th>วัน</th><th>สถานะ</th><th>จัดการ</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function editRecord(id){
+  const rec = records.find(r=>r.id===id);
+  if(rec) fillFormForEdit(rec);
+}
+
+function exportCSV(){
+  const list = getFiltered();
+  const header = ['ยศ-ชื่อสกุล','หน่วย','ตำแหน่ง','ประเภทการลา','วันที่เริ่ม','วันที่สิ้นสุด','จำนวนวัน','สถานะ','เหตุผล'];
+  const lines = [header.join(',')];
+  list.forEach(r=>{
+    const ti = typeInfo(r.type);
+    const row = [r.name, r.unit, r.position, ti.label, r.start, r.end, dayCount(r.start,r.end), STATUS_LABEL[r.status], (r.reason||'').replace(/,/g,' ')];
+    lines.push(row.map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(','));
+  });
+  const blob = new Blob(['\uFEFF'+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ทะเบียนการลา.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function exportExcel(){
+  if(records.length===0){ alert('ยังไม่มีข้อมูลให้ส่งออก'); return; }
+  if(typeof ExcelJS === 'undefined'){ alert('โหลดไลบรารี Excel ไม่สำเร็จ กรุณาลองใหม่หรือตรวจสอบการเชื่อมต่ออินเทอร์เน็ต'); return; }
+
+  const wb = new ExcelJS.Workbook();
+  wb.creator = 'ทะเบียนการลากำลังพล';
+  wb.created = new Date();
+
+  const oliveDark = 'FF333F26';
+  const olive = 'FF4B5A3A';
+  const brass = 'FFA9813F';
+  const card = 'FFF8F4E6';
+  const white = 'FFFFFFFF';
+  const green = 'FF3E6B4F';
+  const amber = 'FFB27C2E';
+  const red = 'FF9C3B3B';
+  const lineColor = 'FFC7BC98';
+  const softText = 'FF5B5A47';
+
+  const now = new Date();
+  const thisYearActive = records.filter(r=>{
+    return r.status!=='rejected' && new Date(r.start+'T00:00:00').getFullYear()===now.getFullYear();
+  });
+
+  const dash = wb.addWorksheet('แดชบอร์ด', {views:[{showGridLines:false}]});
+  dash.columns = [{width:3},{width:24},{width:16},{width:16},{width:16},{width:16},{width:3}];
+
+  dash.mergeCells('B2:F2');
+  const title = dash.getCell('B2');
+  title.value = 'ทะเบียนการลากำลังพล — สรุปภาพรวม';
+  title.font = {name:'Tahoma', size:16, bold:true, color:{argb:white}};
+  title.alignment = {vertical:'middle', horizontal:'left', indent:1};
+  ['B','C','D','E','F'].forEach(col=>{ dash.getCell(col+'2').fill = {type:'pattern',pattern:'solid',fgColor:{argb:olive}}; });
+  dash.getRow(2).height = 30;
+
+  dash.mergeCells('B3:F3');
+  const sub = dash.getCell('B3');
+  sub.value = 'ข้อมูล ณ วันที่ ' + now.toLocaleDateString('th-TH',{day:'2-digit',month:'long',year:'numeric'});
+  sub.font = {name:'Tahoma', size:10, italic:true, color:{argb:softText}};
+  dash.getRow(3).height = 18;
+
+  const total = records.length;
+  const onLeaveToday = records.filter(isOnLeaveToday).length;
+  const pendingCount = records.filter(r=>r.status==='pending').length;
+  const peopleThisYear = new Set(thisYearActive.map(r=>r.name)).size;
+  const kpis = [
+    {label:'รายการลาทั้งหมด', value: total, col:'B'},
+    {label:'อยู่ระหว่างลาวันนี้', value: onLeaveToday, col:'C'},
+    {label:'รออนุมัติ', value: pendingCount, col:'D'},
+    {label:'กำลังพล (ปีนี้)', value: peopleThisYear, col:'E'}
+  ];
+  kpis.forEach(k=>{
+    const vCell = dash.getCell(k.col+'5');
+    vCell.value = k.value;
+    vCell.font = {name:'Tahoma', size:22, bold:true, color:{argb:oliveDark}};
+    vCell.alignment = {horizontal:'center', vertical:'middle'};
+    vCell.fill = {type:'pattern', pattern:'solid', fgColor:{argb:card}};
+    vCell.border = {top:{style:'thin',color:{argb:lineColor}}, left:{style:'thin',color:{argb:lineColor}}, right:{style:'thin',color:{argb:lineColor}}, bottom:{style:'thin',color:{argb:lineColor}}};
+    const lCell = dash.getCell(k.col+'6');
+    lCell.value = k.label;
+    lCell.font = {name:'Tahoma', size:9, color:{argb:softText}};
+    lCell.alignment = {horizontal:'center'};
+  });
+  dash.getRow(5).height = 34;
+
+  let r = 9;
+  dash.getCell('B'+r).value = 'สรุปวันลาแยกตามประเภท (ปีนี้)';
+  dash.getCell('B'+r).font = {bold:true, size:12, color:{argb:oliveDark}};
+  r++;
+  const typeHeaderRow = r;
+  ['ประเภทการลา','จำนวนวัน'].forEach((h,i)=>{
+    const cell = dash.getCell((i===0?'B':'C')+typeHeaderRow);
+    cell.value = h;
+    cell.font = {bold:true, color:{argb:white}};
+    cell.fill = {type:'pattern',pattern:'solid',fgColor:{argb:olive}};
+    cell.alignment = {horizontal:'center'};
+  });
+  r++;
+  const typeTotals = {};
+  thisYearActive.forEach(rec=>{ typeTotals[rec.type] = (typeTotals[rec.type]||0) + dayCount(rec.start, rec.end); });
+  const typeStart = r;
+  LEAVE_TYPES.forEach(t=>{
+    const d = typeTotals[t.id]||0;
+    if(d===0) return;
+    dash.getCell('B'+r).value = t.label;
+    dash.getCell('C'+r).value = d;
+    dash.getCell('B'+r).font = {size:10};
+    dash.getCell('C'+r).font = {size:10};
+    dash.getCell('C'+r).alignment = {horizontal:'center'};
+    r++;
+  });
+  const typeEnd = r-1;
+  if(typeEnd >= typeStart){
+    dash.addConditionalFormatting({ ref:'C'+typeStart+':C'+typeEnd, rules:[{type:'dataBar', cfvo:[{type:'min'},{type:'max'}], color:{argb:brass}}] });
+  }
+
+  r += 2;
+  dash.getCell('B'+r).value = 'กำลังพลที่ลาสะสมมากที่สุด (ปีนี้)';
+  dash.getCell('B'+r).font = {bold:true, size:12, color:{argb:oliveDark}};
+  r++;
+  const personHeaderRow = r;
+  ['กำลังพล','หน่วย','วันลาสะสม'].forEach((h,i)=>{
+    const col = ['B','C','D'][i];
+    const cell = dash.getCell(col+personHeaderRow);
+    cell.value = h;
+    cell.font = {bold:true, color:{argb:white}};
+    cell.fill = {type:'pattern',pattern:'solid',fgColor:{argb:olive}};
+    cell.alignment = {horizontal: i===2?'center':'left'};
+  });
+  r++;
+  const byPerson = {};
+  thisYearActive.forEach(rec=>{
+    if(!byPerson[rec.name]) byPerson[rec.name] = {unit:rec.unit, days:0};
+    byPerson[rec.name].days += dayCount(rec.start, rec.end);
+    byPerson[rec.name].unit = rec.unit || byPerson[rec.name].unit;
+  });
+  const personList = Object.entries(byPerson).map(([name,v])=>({name,...v})).sort((a,b)=>b.days-a.days).slice(0,10);
+  const personStart = r;
+  personList.forEach(p=>{
+    dash.getCell('B'+r).value = p.name;
+    dash.getCell('C'+r).value = p.unit || '-';
+    dash.getCell('D'+r).value = p.days;
+    dash.getCell('B'+r).font = {size:10};
+    dash.getCell('C'+r).font = {size:10, color:{argb:softText}};
+    dash.getCell('D'+r).font = {size:10, bold:true};
+    dash.getCell('D'+r).alignment = {horizontal:'center'};
+    r++;
+  });
+  const personEnd = r-1;
+  if(personEnd >= personStart){
+    dash.addConditionalFormatting({ ref:'D'+personStart+':D'+personEnd, rules:[{type:'dataBar', cfvo:[{type:'min'},{type:'max'}], color:{argb:olive}}] });
+  }
+
+  const ws = wb.addWorksheet('รายการบันทึกการลา', {views:[{state:'frozen', ySplit:1}]});
+  ws.columns = [
+    {header:'ยศ-ชื่อสกุล', key:'name', width:26},
+    {header:'หน่วย', key:'unit', width:16},
+    {header:'ตำแหน่ง', key:'position', width:16},
+    {header:'ประเภทการลา', key:'type', width:24},
+    {header:'วันที่เริ่ม', key:'start', width:14},
+    {header:'วันที่สิ้นสุด', key:'end', width:14},
+    {header:'จำนวนวัน', key:'days', width:10},
+    {header:'สถานะ', key:'status', width:14},
+    {header:'เหตุผล', key:'reason', width:32}
+  ];
+  ws.getRow(1).eachCell(c=>{
+    c.font = {bold:true, color:{argb:white}};
+    c.fill = {type:'pattern', pattern:'solid', fgColor:{argb:olive}};
+    c.alignment = {horizontal:'center', vertical:'middle'};
+  });
+  ws.getRow(1).height = 22;
+
+  records.forEach(rec=>{
+    const row = ws.addRow({
+      name: rec.name, unit: rec.unit, position: rec.position,
+      type: typeInfo(rec.type).label, start: fmtDate(rec.start), end: fmtDate(rec.end),
+      days: dayCount(rec.start, rec.end), status: STATUS_LABEL[rec.status], reason: rec.reason
+    });
+    const statusColor = rec.status==='approved' ? green : rec.status==='pending' ? amber : red;
+    row.eachCell(c=>{ c.font = {size:10}; });
+    row.getCell(7).alignment = {horizontal:'center'};
+    row.getCell(8).font = {size:10, bold:true, color:{argb:white}};
+    row.getCell(8).fill = {type:'pattern', pattern:'solid', fgColor:{argb:statusColor}};
+    row.getCell(8).alignment = {horizontal:'center'};
+  });
+
+  const ps = wb.addWorksheet('สรุปรายบุคคล', {views:[{state:'frozen', ySplit:1}]});
+  ps.columns = [
+    {header:'กำลังพล', key:'name', width:26},
+    {header:'หน่วย', key:'unit', width:16},
+    {header:'จำนวนครั้ง', key:'count', width:12},
+    {header:'วันลาสะสม (ปีนี้)', key:'days', width:18}
+  ];
+  ps.getRow(1).eachCell(c=>{
+    c.font = {bold:true, color:{argb:white}};
+    c.fill = {type:'pattern', pattern:'solid', fgColor:{argb:olive}};
+    c.alignment = {horizontal:'center'};
+  });
+  const fullByPerson = {};
+  thisYearActive.forEach(rec=>{
+    if(!fullByPerson[rec.name]) fullByPerson[rec.name] = {unit:rec.unit, count:0, days:0};
+    fullByPerson[rec.name].count += 1;
+    fullByPerson[rec.name].days += dayCount(rec.start, rec.end);
+    fullByPerson[rec.name].unit = rec.unit || fullByPerson[rec.name].unit;
+  });
+  const fullList = Object.entries(fullByPerson).map(([name,v])=>({name,...v})).sort((a,b)=>b.days-a.days);
+  fullList.forEach(p=>{
+    const row = ps.addRow({name:p.name, unit:p.unit||'-', count:p.count, days:p.days});
+    row.eachCell(c=>{ c.font = {size:10}; });
+    row.getCell(3).alignment = {horizontal:'center'};
+    row.getCell(4).alignment = {horizontal:'center'};
+    row.getCell(4).font = {size:10, bold:true};
+  });
+  if(fullList.length>0){
+    ps.addConditionalFormatting({ ref:'D2:D'+(fullList.length+1), rules:[{type:'dataBar', cfvo:[{type:'min'},{type:'max'}], color:{argb:olive}}] });
+  }
+
+  const buffer = await wb.xlsx.writeBuffer();
+  const blob = new Blob([buffer], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ทะเบียนการลา-แดชบอร์ด.xlsx';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function render(){
+  computeStats();
+  renderTable();
+}
+
+populateSelects();
+document.getElementById('fType').value = LEAVE_TYPES[0].id;
+document.getElementById('loginHint').textContent = 'บัญชีเริ่มต้น: admin / admin1234 (แนะนำให้เปลี่ยนหลังเข้าใช้งานครั้งแรก)';
+
+document.getElementById('btnLogin').addEventListener('click', handleLogin);
+document.getElementById('loginPass').addEventListener('keydown', e=>{ if(e.key==='Enter') handleLogin(); });
+document.getElementById('btnLogout').addEventListener('click', handleLogout);
+document.getElementById('btnAddUser').addEventListener('click', addUser);
+document.getElementById('btnOpenAddPersonnel2').addEventListener('click', ()=>openPersonnelModal());
+document.getElementById('btnCancelPersonnelModal').addEventListener('click', closePersonnelModal);
+document.getElementById('btnSavePersonnelModal').addEventListener('click', savePersonnelModal);
+document.getElementById('personnelModalOverlay').addEventListener('click', e=>{ if(e.target.id==='personnelModalOverlay') closePersonnelModal(); });
+document.getElementById('navMain').addEventListener('click', ()=>switchView('main'));
+document.getElementById('navLedger').addEventListener('click', ()=>switchView('ledger'));
+document.getElementById('navRoster').addEventListener('click', ()=>switchView('roster'));
+document.getElementById('navUsers').addEventListener('click', ()=>{ if(currentUser && currentUser.role==='admin') switchView('users'); });
+document.getElementById('rSearch').addEventListener('input', renderRosterTable);
+document.getElementById('rUnit').addEventListener('change', renderRosterTable);
+document.getElementById('fName').addEventListener('change', autofillFromPersonnel);
+
+document.getElementById('btnSave').addEventListener('click', saveFromForm);
+document.getElementById('btnCancelEdit').addEventListener('click', resetForm);
+document.getElementById('btnExport').addEventListener('click', exportCSV);
+document.getElementById('fStart').addEventListener('change', updateDaysHint);
+document.getElementById('fEnd').addEventListener('change', updateDaysHint);
+document.getElementById('qSearch').addEventListener('input', renderTable);
+document.getElementById('qType').addEventListener('change', renderTable);
+document.getElementById('qStatus').addEventListener('change', renderTable);
+
+loadUsers();
+</script>
+</body>
+</html>
